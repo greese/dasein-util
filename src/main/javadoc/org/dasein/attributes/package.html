@@ -1,0 +1,65 @@
+<!--
+
+    Copyright (C) 1998-2012 enStratus Networks Inc
+
+    ====================================================================
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+    ====================================================================
+
+-->
+
+<body>
+	<p>
+		The Dasein Attributes Library contains an API that enables you to associate arbitrary
+		attributes with an object managed by a complex type manager. Valtira originally
+		developed this API to manage attributes for elements in the
+		<a href="http://simplicis.valtira.com" title="Simplicis web page">Simplicis Content
+	    Management System</a>. In that system, a page may have an arbitrary set
+		of attributes established by the developed. For example, a press release might have
+		a dateline that includes a location and a date. The person creating the page type
+		for press releases needs to tell the CMS to prompt content owners for that data and
+		have it validated. So, the page type has two data types set up:
+	</p>
+	<ol>
+		<li>a date of type &quot;date&quot;</li>
+		<li>a location of type &quot;string&quot;</li>
+	</ol>
+	<p>
+		These generic attributes, or data types, are associated with the page type.
+		When a content owner creates a press release, the UI prompts the content owner for
+		values for date and location. The attributes library will then validate that entry
+		and provide programmatic access to those values as instances of the correct Java
+		data type (i.e. <code>java.util.Date</code> and <code>java.lang.String</code>).
+	</p>
+	<p>
+		This library includes the following built-in data types:
+    </p>
+	<ul>
+		<li>boolean</li>
+		<li>currency</li>
+		<li>date</li>
+		<li>decimal</li>
+		<li>number</li>
+		<li>string</li>
+    </ul>
+	<p>
+		You can implement your own custom data types by subclasses the <code>DataTypeFactory</code>
+		and <code>DataType</code> classes and then creating a configuration file
+		<i>/dasein/types.cfg</i> that simply contains the names of your factory implementation
+		classes, one per line.
+	</p>
+	<p>
+		The Dasein Persistence libraries additionally include utilities for persisting data
+		types and stored attributes (both built-in and custom) to a database.
+	</p>
+</body>

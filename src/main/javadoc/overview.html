@@ -1,0 +1,166 @@
+<!--
+
+    Copyright (C) 1998-2012 enStratus Networks Inc
+
+    ====================================================================
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+    ====================================================================
+
+-->
+
+<body>
+<p>
+  The Dasein Utilities are general-purpose tools for doing a bunch of unrelated, common programming
+  tasks in Java. It includes components that:
+</p>
+<ul>
+<li>Better encapsulate java.util.Calendar functionality, especially so that it is accessible via JSTL EL.</li>
+<li>Handle smart-caching of singleton objects that can be accessed by multiple indexes while retaining a small memory footprint.</li>
+<li>Provide generic sorting routines that allow you to sort Java objects on any attribute, including subattributes.</li>
+<li>Store multiple translations for a given expression in memory concurrently and find the translation that best matches a user's language preferences.</li>
+<li>Serve as a tag library for managing Java 5 enumerations using JSTL.</li>
+<li>Serve as a tag library for manipulating dates in JSTL.</li>
+<li>Support type-safe, arbitrary attribute association for objects. Very useful for complex meta-data.</li>
+</ul>
+
+<h2>Better Calendaring</h2>
+
+<p>
+The Java Calendar API may be the worst written set of components in the Java specification. The 
+generic get() and set() methods violate Java Bean standards and make a Calendar object inaccessible 
+to JSTL-compliant JSP pages without dropping into Java code.
+<p>
+The Dasein calendar tools provide a wrapper around the core Java Calendar object and enable you to 
+manipulate dates in a JSP page through a simple tag library. These classes include:
+</p>
+<ul>
+<li> {@link org.dasein.util.CalendarWrapper} </li>
+<li> {@link org.dasein.net.jsp.date.CalendarTag} </li>
+<li> {@link org.dasein.net.jsp.date.IncrementTag} </li>
+</ul>
+
+<h2>Smart Caching</h2>
+
+<p>
+When building a server-side, database-driven application, you need to carefully balance calls to the 
+database with memory usage. If you keep everything in memory, you minimize expensive database queries 
+at the expense of RAM. If you go to the database for every object lookup, you sacrifice performance.
+</p>
+<p>
+A caching library can help you minimize trips to the database without eating up all your memory. 
+The Dasein caching tools will cache objects in memory and index them using weak references. When 
+they are no longer in use by the rest of your application, they become eligible for garbage collection. 
+In the mean time, you can retrieve them using your most common lookups without touching the database.
+</p>
+<p>
+The result: a lightning fast application with a minimal memory footprint.
+</p>
+<p>
+Features of this caching library include:
+</p>
+<ul>
+<li>A single copy of any particular object sits in memory at any given point in time. All clients 
+share this object and thus minimize memory overhead.</li>
+<li>All objects are readily available for garbage collection if the server is done using them. You 
+do not need to track object state.</li>
+<li>You can tell the cache how often to force a re-sync with the database, so that heavy-use 
+objects (objects that never get garbage-collected) are forced to re-sync with the database.</li>
+<li>You can leverage multiple in-memory indexes so that lookups on unique indexes are lightning fast.</li>
+</ul>
+
+<h2>Easy Sorting</h2>
+
+<p>
+The Dasein sorting object can be passed in as a {@link java.util.Comparator} that will do complex, 
+locale-specific sorting on any Java object. Would you like to sort your Employee objects based first 
+on their last name then first name? Just use the following code:
+</p>
+<pre>
+GenericSorter<Employee> sorter = new GenericSorter<Employee>("lastName,firstName");
+TreeSet<Employee> employees = new TreeSet<Employee>(sorter);
+
+employees.add(getEmployee(1));
+employees.add(getEmployee(2));
+</pre>
+<p>
+The sort criteria can be attributes of attributes. For example, you can sort employees by state by 
+passing in the string "address.state.abbreviation" (assuming, of course, Employee has a getAddress() 
+method returning an Address object which in turn has a getState() method...).
+</p>
+<p>
+The objects you wish to sort do not need to implement any pre-set interface or extend any base class.
+You can also specify a locale for locale-specific sorting. If you use the Dasein Translator objects, 
+the sorter will sort any Translator values based on the string representing the user-specific 
+translation.
+</p>
+<p>
+For example, if you would like to sort a list of web pages by their title:
+</p>
+<pre>
+GenericSorter<WebPage> sorter = new GenericSorter<WebPage>("title", mylocale);
+TreeSet<WebPage> pages = new TreeSet<WebPage>(sorter);
+
+pages.addAll(getAllPages());
+</pre>
+<p>
+Assuming title is a {@link org.dasein.util.Translator}, the list will sort acccording to the 
+English title for English speakers and according to the Spanish title for Spanish speakers.
+</p>
+
+<h2>Translation Management</h2>
+
+<p>
+Properties files work for managing simple translations for labels and other UI-level components, 
+but are terrible for managing more complex multi-lingual content. The Dasein Translator stores 
+multiple translations for a concept in memory and then provides the best translation to map to a 
+given locale. Combined with the Dasein Persistence Library, you can store multi-lingual content 
+in a database and associate it with your core entities.
+</p>
+
+<h2>Enum Management</h2>
+<p>
+Java 5 enumerations are very useful, but they are not terribly JSTL-friendly. Dasein provides 
+convenient tag libriaries to allow you to iterate over enums and translate between strings and 
+enum classes.
+</p>
+
+<h2>Type-safe Attributes</h2>
+<p>
+Type-safe attributes enable you to associate dynamic meta-data with a given class. In many 
+environments, for example, you need to tag a class with attributes after the class is written. 
+For example, you may allow each department in your organization to specify different employee 
+attributes that have meaning only to that department.
+</p>
+<p>
+You could, of course, have a generic {@link java.util.Map} in the Employee class to map these 
+custom attributes to the employee. Unfortunately, this map has the following drawbacks:
+</p>
+<ul>
+<li>Even with Java generics support, it is not typesafe since you cannot know at compile 
+time what the proper data type should be.</li>
+<li>You cannot restrict it so that only members of department X have attributes Y and Z.</li>
+</ul>
+<p>
+The Dasein type-safe attributes let you do just that.
+</p>
+<p>
+  This library depends on the following libraries:
+</p>
+<ul>
+  <li><a href="http://logging.apache.org/log4j/1.2/index.html" target="apache">Apache Log4j</a></li>
+  <li>Java Servlets API (only required for the filters and servlets in dasein-utils)</li>
+</ul>
+<p>
+  <em>The Dasein Utilities are released under the terms of the Artistic License 2.0.</em>
+</p>
+</body>
