@@ -18,6 +18,8 @@
 
 package org.dasein.util;
 
+import org.dasein.util.tasks.DaseinUtilTasks;
+
 public abstract class CursorPopulator<T> {
     private ForwardCursor<T> cursor;
 
@@ -32,8 +34,25 @@ public abstract class CursorPopulator<T> {
     public ForwardCursor<T> getCursor() {
         return cursor;
     }
+
+    private class CursorPopulatorTask implements Runnable {
+        @Override
+        public void run() {
+            try {
+                populate(cursor);
+                cursor.complete();
+            }
+            catch( Throwable t ) {
+                cursor.error(t);
+            }
+        }
+    }
     
     public void populate() {
+        if (DaseinUtilProperties.isTaskSystemEnabled()) {
+            DaseinUtilTasks.submit(new CursorPopulatorTask());
+            return;
+        }
         Thread t = new Thread() {
             public void run() {
                 try {
