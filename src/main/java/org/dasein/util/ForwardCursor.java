@@ -19,11 +19,12 @@
 package org.dasein.util;
 
 import org.apache.log4j.Logger;
-import org.dasein.util.uom.time.*;
+import org.dasein.util.uom.time.Millisecond;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
@@ -33,7 +34,9 @@ import java.util.concurrent.TimeoutException;
  * @param <T> the type of objects stored in the cursor
  */
 public class ForwardCursor<T> implements Iterable<T> {
-    Logger logger = Logger.getLogger(ForwardCursor.class);
+    static private Logger logger = Logger.getLogger(ForwardCursor.class);
+    static private final Random idGenerator = new Random();
+
     
     static private class CursorItem<T> {
         public Throwable loadError;
@@ -43,7 +46,7 @@ public class ForwardCursor<T> implements Iterable<T> {
 
     private int                                              count;
     private CursorItem<T>                                    head;
-    private String                                           name;
+    private final String                                     name;
     private boolean                                          loaded;
     private int                                              size;
     private CursorItem<T>                                    tail;
@@ -62,11 +65,12 @@ public class ForwardCursor<T> implements Iterable<T> {
         else {
             this.timeout = new org.dasein.util.uom.time.TimePeriod<Millisecond>(CalendarWrapper.MINUTE * 10L, org.dasein.util.uom.time.TimePeriod.MILLISECOND);
         }
+        String uuid = new UUID(idGenerator.nextLong(), idGenerator.nextLong()).toString();
         if( name == null ) {
-            this.name = UUID.randomUUID().toString();
+            this.name = uuid;
         }
         else {
-            this.name = name + " [" + UUID.randomUUID().toString() + "]";
+            this.name = name + " [" + uuid + "]";
         }
     } 
     
@@ -209,7 +213,7 @@ public class ForwardCursor<T> implements Iterable<T> {
             long untouched = System.currentTimeMillis() - lastTouch;
 
             if( untouched > timeout.longValue() ) {
-                logger.error("[" + this + "] Cursor timeout for " + getName());
+                logger.error("[" + this.name + "] Cursor timeout for " + getName());
                 this.error(new TimeoutException("Cursor timed out while loading"));
             }
             if( waitStart == -1L ) {
@@ -219,7 +223,7 @@ public class ForwardCursor<T> implements Iterable<T> {
                 if( (System.currentTimeMillis() - waitStart) > CalendarWrapper.MINUTE ) {
                     if( (System.currentTimeMillis() - scream) > CalendarWrapper.MINUTE ) {
                         scream = System.currentTimeMillis();
-                        logger.warn("[" + this + "] " + ((System.currentTimeMillis()-lastTouch)/1000) + " seconds since last touch.");
+                        logger.warn("[" + this.name + "] " + ((System.currentTimeMillis()-lastTouch)/1000) + " seconds since last touch.");
                     }
                 }
             }

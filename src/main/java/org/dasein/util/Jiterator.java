@@ -20,7 +20,7 @@ package org.dasein.util;
 
 import com.sun.istack.internal.Nullable;
 import org.apache.log4j.Logger;
-import org.dasein.util.uom.time.*;
+import org.dasein.util.uom.time.Millisecond;
 import org.dasein.util.uom.time.TimePeriod;
 
 import javax.annotation.Nonnull;
@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
@@ -50,17 +51,18 @@ import java.util.concurrent.TimeoutException;
  * @param <T> the type of object being managed in the jiterator
  */
 public class Jiterator<T> implements Iterator<T>, Iterable<T> {
-    Logger logger = Logger.getLogger(Jiterator.class);
+    static private final Logger logger = Logger.getLogger(Jiterator.class);
+    static private final Random idGenerator = new Random();
     
-    private JiteratorFilter<T>                               filter;
-    private String                                           jiteratorId;
-    private long                                             lastTouch;
-    private Exception                                        loadException;
-    private boolean                                          loaded;
-    private String                                           name;
-    private org.dasein.util.uom.time.TimePeriod<Millisecond> timeout;
-    private ArrayList<T>                                     waiting;
-    
+    private final JiteratorFilter<T> filter;
+    private final String             jiteratorId;
+    private volatile long            lastTouch;
+    private volatile Exception       loadException;
+    private boolean                  loaded;
+    private final String             name;
+    private TimePeriod<Millisecond>  timeout;
+    private ArrayList<T>             waiting;
+
     private transient boolean nexting = false;
     
     /**
@@ -117,7 +119,7 @@ public class Jiterator<T> implements Iterator<T>, Iterable<T> {
         lastTouch = System.currentTimeMillis();
         loaded = false;
         waiting = new ArrayList<T>();
-        jiteratorId = UUID.randomUUID().toString();
+        jiteratorId = new UUID(idGenerator.nextLong(), idGenerator.nextLong()).toString();
         this.filter = filter;
         if( name != null ) {
             this.name = name;
