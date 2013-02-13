@@ -22,7 +22,7 @@
 
   <groupId>org.dasein</groupId>
   <artifactId>dasein-util</artifactId>
-  <version>2013.01-SNAPSHOT</version>
+  <version>2013.02-SNAPSHOT</version>
 
   <name>dasein-util</name>
   <description>
@@ -76,13 +76,13 @@
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
       <version>2.5</version>
-      <scope>compile</scope>
+      <scope>provided</scope>
     </dependency>    
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>jsp-api</artifactId>
       <version>2.0</version>
-      <scope>compile</scope>
+      <scope>provided</scope>
     </dependency>
       <dependency>
           <groupId>com.google.code.findbugs</groupId>
@@ -146,7 +146,7 @@
                     <exclude>**/LICENSE-APACHE.txt</exclude>
                 </excludes>
                 <properties>
-                    <year>1998-2012</year>
+                    <year>1998-2013</year>
                     <copyrightHolder>enStratus Networks Inc</copyrightHolder>
                 </properties>
             </configuration>
