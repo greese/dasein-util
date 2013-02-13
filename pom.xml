@@ -28,7 +28,7 @@
   <description>
     Utilities for writing Java applications 
   </description>
-  <url>http://dasein-utils.sf.net</url>
+  <url>https://github.com/greese/dasein-util</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -45,12 +45,12 @@
     <name>enStratus Networks Inc</name>
     <url>http://www.enstratus.com</url>
   </organization>
-    
-  <scm>
-    <connection>scm:svn:https://dasein-utils.svn.sourceforge.net/svnroot/dasein-utils/trunk/dasein-util</connection>
-    <developerConnection>scm:svn:https://dasein-utils.svn.sourceforge.net/svnroot/dasein-utils/trunk/dasein-util</developerConnection>
-    <url>https://dasein-utils.svn.sourceforge.net/svnroot/dasein-utils/trunk/dasein-util</url>
-  </scm>
+
+    <scm>
+        <connection>scm:git:git://github.com/greese/dasein-util.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/greese/dasein-util.git</developerConnection>
+        <url>http://github.com/greese/dasein-util</url>
+    </scm>
       
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -62,13 +62,13 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.8.2</version>
+      <version>4.9</version>
       <scope>test</scope>
     </dependency>
     <dependency>
         <groupId>log4j</groupId>
         <artifactId>log4j</artifactId>
-        <version>1.2.16</version>
+        <version>1.2.17</version>
         <scope>compile</scope>
         <optional>false</optional>
     </dependency>    
@@ -169,9 +169,6 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-release-plugin</artifactId>
             <version>2.1</version>
-            <configuration>
-                <tagBase>https://dasein-utils.svn.sourceforge.net/svnroot/dasein-utils/tags/dasein-util</tagBase>
-            </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
