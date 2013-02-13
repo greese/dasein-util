@@ -32,23 +32,22 @@ public abstract class CursorPopulator<T> {
     public ForwardCursor<T> getCursor() {
         return cursor;
     }
+
+    private class CursorPopulatorTask implements Runnable {
+        @Override
+        public void run() {
+            try {
+                populate(cursor);
+                cursor.complete();
+            }
+            catch( Throwable t ) {
+                cursor.error(t);
+            }
+        }
+    }
     
     public void populate() {
-        Thread t = new Thread() {
-            public void run() {
-                try {
-                    populate(cursor);
-                    cursor.complete();
-                }
-                catch( Throwable t ) {
-                    cursor.error(t);
-                }
-            }
-        };
-        
-        t.setName("Cursor populator for: " + cursor.getName());
-        t.setDaemon(true);
-        t.start();
+        DaseinUtilTasks.submit(new CursorPopulatorTask());
     }
     
     public abstract void populate(ForwardCursor<T> cursor);
