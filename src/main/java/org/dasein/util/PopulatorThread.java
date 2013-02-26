@@ -19,45 +19,24 @@
 package org.dasein.util;
 
 import java.util.Collection;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import org.apache.log4j.Logger;
-import org.dasein.util.uom.time.*;
+import org.dasein.util.uom.time.Millisecond;
 import org.dasein.util.uom.time.TimePeriod;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class PopulatorThread<T> implements Runnable {
-    static private final Logger logger = Logger.getLogger(PopulatorThread.class);
-    
-    static private final ExecutorService threadPool = Executors.newCachedThreadPool();
-    
-    static {
-    	try {
-    		PoolTerminator.addTerminationHandler(new Callable<Boolean>() {
-    			public Boolean call() {
-    				threadPool.shutdown();
-    				return true;
-    			}
-    		});
-    	}
-    	catch( Throwable ignore ) {
-    		// this will get thrown when not in a J2EE container
-    	}
-    }
 
     @SuppressWarnings("unused")
     static public void terminate() {
-    	threadPool.shutdown();
+    	// NO-OP. Signature maintained for backwards compatibility.
     }
     
-    private JitCollection<T>                                 collection;
-    private Jiterator<T>                                     iterator;
-    private JiteratorPopulator<T>                            populator;
-    private org.dasein.util.uom.time.TimePeriod<Millisecond> timeout;
+    private JitCollection<T>        collection;
+    private Jiterator<T>            iterator;
+    private JiteratorPopulator<T>   populator;
+    private TimePeriod<Millisecond> timeout;
     
     public PopulatorThread(@Nonnull JiteratorPopulator<T> populator) {
         this(null, populator, null);
@@ -70,7 +49,7 @@ public class PopulatorThread<T> implements Runnable {
     public PopulatorThread(@Nullable org.dasein.util.uom.time.TimePeriod<?> timeout, @Nonnull JiteratorPopulator<T> populator, @Nullable JiteratorFilter<T> filter) {
         this.populator = populator;
         if( timeout != null ) {
-            this.timeout = (org.dasein.util.uom.time.TimePeriod<Millisecond>)timeout.convertTo(TimePeriod.MILLISECOND);
+            this.timeout = (TimePeriod<Millisecond>)timeout.convertTo(TimePeriod.MILLISECOND);
         }
         iterator = new Jiterator<T>(null, null, filter, this.timeout);
         collection = new JitCollection<T>(iterator, "Jiterator Collection Loader");
@@ -81,7 +60,7 @@ public class PopulatorThread<T> implements Runnable {
     }
     
     public void populate() {
-        threadPool.submit(this);
+        DaseinUtilTasks.submit(this);
     }
 
     public void setSize(int size) {
