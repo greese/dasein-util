@@ -110,8 +110,18 @@ public class CalendarTag extends TagSupport {
         calendar = cal;
     }
     
-    public void setDate(Date d)  {
-        date = d;
+    public void setDate(Object ob)  {
+    	
+    	if (ob == null) {
+    		date = null;
+    	} else if (ob instanceof Date) {
+    		date = (Date) ob;
+    	} else if (ob instanceof String) {
+    		date = new Date(Long.parseLong(ob.toString()));
+    	} else if (ob instanceof Long) {
+    		date = new Date((Long) ob);
+    	} 
+
     }
     
     public void setDay(Object d)  {

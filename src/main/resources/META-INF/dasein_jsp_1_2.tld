@@ -10,376 +10,486 @@
 
   <tag>
     <name>calendar</name>
-    <tagclass>org.dasein.net.jsp12.date.CalendarTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.date.CalendarTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>calendar</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>org.dasein.util.CalendarWrapper</type>
     </attribute>
     <attribute>
       <name>date</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>day</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>locale</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.util.Locale</type>
     </attribute>
     <attribute>
       <name>month</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>time</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>var</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
       <name>year</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
     </attribute>
   </tag>
 
   <tag>
     <name>collection</name>
-    <tagclass>org.dasein.net.jsp12.util.CollectionTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.util.CollectionTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>collection</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.util.Collection</type>
     </attribute>
     <attribute>
       <name>item</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>items</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>unique</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>var</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
   <tag>
     <name>csv</name>
-    <tagclass>org.dasein.net.jsp12.util.CSVTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.util.CSVTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>fileKey</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
       <name>var</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
   <tag>
     <name>constraint</name>
-    <tagclass>org.dasein.net.jsp12.util.ConstraintTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.util.ConstraintTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>typeInfo</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
       <name>type</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
       <name>var</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
   <tag>
     <name>currency</name>
-    <tagclass>org.dasein.net.jsp12.util.CurrencyTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.util.CurrencyTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>isoCode</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
       <name>locale</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>varException</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
       <name>varSymbol</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>    
     <attribute>
       <name>var</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
   
   <tag>
     <name>dataSize</name>
-    <tagclass>org.dasein.net.jsp12.util.DataSizeTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.util.DataSizeTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>locale</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.util.Locale</type>
     </attribute>
     <attribute>
       <name>metric</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
       <name>size</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>var</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
   
   <tag>
     <name>dataType</name>
-    <tagclass>org.dasein.net.jsp12.util.DataTypeTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.util.DataTypeTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>typeName</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
       <name>var</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
   <tag>
     <name>enum</name>
-    <tagclass>org.dasein.net.jsp12.util.EnumTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.util.EnumTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>enumName</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
       <name>value</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
       <name>var</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
   <tag>
     <name>enumDisplay</name>
-    <tagclass>org.dasein.net.jsp12.util.EnumDisplayTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.util.EnumDisplayTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>enum</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Enum</type>
     </attribute>
     <attribute>
       <name>var</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
   <tag>
     <name>enumName</name>
-    <tagclass>org.dasein.net.jsp12.util.EnumNameTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.util.EnumNameTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>enum</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Enum</type>
     </attribute>
     <attribute>
       <name>var</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
   <tag>
     <name>escape</name>
-    <tagclass>org.dasein.net.jsp12.util.EscapeTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.util.EscapeTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>value</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
       <name>var</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
   <tag>
     <name>group</name>
-    <tagclass>org.dasein.net.jsp12.util.GroupTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.util.GroupTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>attribute</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
       <name>list</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.util.Collection</type>
     </attribute>
     <attribute>
       <name>var</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
       <name>varHeaders</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
   <tag>
     <name>groupDataTypes</name>
-    <tagclass>org.dasein.net.jsp12.util.GroupDataTypesTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.util.GroupDataTypesTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>dataTypes</name>
+      <type>org.dasein.attributes.DataTypeMap</type>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
       <name>var</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
   <tag>
     <name>increment</name>
-    <tagclass>org.dasein.net.jsp12.date.IncrementTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.date.IncrementTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>calendar</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>increment</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>period</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
   </tag>
 
   <tag>
     <name>keyValue</name>
-    <tagclass>org.dasein.net.jsp12.util.KeyValueTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.util.KeyValueTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>key</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
       <name>map</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.util.Map</type>
     </attribute>
     <attribute>
       <name>value</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
       <name>var</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
       <name>varResult</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
   </tag>
 
   <tag>
     <name>map</name>
-    <tagclass>org.dasein.net.jsp12.util.MapTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.util.MapTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>items</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.util.Collection</type>
     </attribute>
     <attribute>
       <name>key</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
       <name>var</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
       <name>varKeys</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
   <tag>
     <name>timestamp</name>
-    <tagclass>org.dasein.net.jsp12.util.TimestampTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.util.TimestampTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>key</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
   <tag>
     <name>timeZone</name>
-    <tagclass>org.dasein.net.jsp12.date.TimeZoneTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.date.TimeZoneTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>locale</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.util.Locale</type>
     </attribute>
     <attribute>
       <name>timeZone</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>var</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
   <tag>
     <name>typeValue</name>
-    <tagclass>org.dasein.net.jsp12.util.TypeValueTag</tagclass>
-    <bodycontent>empty</bodycontent>
+    <tag-class>org.dasein.net.jsp12.util.TypeValueTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
       <name>item</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>type</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
       <name>locale</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.util.Lang</type>
     </attribute>
     <attribute>
       <name>varDisplay</name>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
       <name>var</name>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
+
 
 </taglib>

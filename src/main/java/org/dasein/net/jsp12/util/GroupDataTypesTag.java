@@ -46,14 +46,14 @@ public class GroupDataTypesTag extends TagSupport {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public int doEndTag() throws JspException {
         try  {
-            Map<String,Collection<Map>> attrs = new HashMap<String,Collection<Map>>();
+            Map<String,Collection<Map>> attrs = new HashMap<String,Collection<Map>>(dataTypes.size());
             for (Map.Entry e : dataTypes.entrySet()) {
                 DataType dt = (DataType) e.getValue();
                 String grp = (dt.getGroup() != null ? dt.getGroup() : "");
                 if (!attrs.containsKey(grp)) {
-                    attrs.put(grp, new ArrayList<Map>());
+                    attrs.put(grp, new ArrayList<Map>(1));
                 }
-                Map m = new HashMap();
+                Map m = new HashMap(1);
                 m.put(e.getKey(), e.getValue());
                 attrs.get(grp).add(m);
             }

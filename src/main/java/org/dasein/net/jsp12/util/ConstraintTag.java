@@ -78,6 +78,9 @@ public class ConstraintTag extends TagSupport {
     
     public void setTypeInfo(String val) {
         typeInfo = val;
+        if (typeInfo.isEmpty()) {
+        	typeInfo = null;
+        }
     }
     
     public void setVar(String v) {
