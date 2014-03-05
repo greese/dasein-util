@@ -327,7 +327,7 @@ public abstract class DataTypeFactory<V> implements Serializable {
      * @return a list of constraints on this data type
      */
     public Collection<Constraint> getConstraints() {
-        return new ArrayList<Constraint>();
+        return new ArrayList<Constraint>(0);
     }
     
     /**
