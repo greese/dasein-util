@@ -135,7 +135,7 @@ public class StringFactory extends DataTypeFactory<String> {
             if( choix != null && choix.length() > 0 ) {
                 String[] parts = choix.split(",");
 
-                choices = new ArrayList<String>();
+                choices = new ArrayList<String>(parts.length);
                 if( parts.length < 1 ) {
                     choices.add(choix);
                 }

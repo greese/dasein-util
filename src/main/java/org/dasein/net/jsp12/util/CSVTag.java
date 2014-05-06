@@ -19,16 +19,20 @@
 package org.dasein.net.jsp12.util;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import org.dasein.util.CSVParser;
+import org.dasein.util.CSVParser.Record;
 
 public class CSVTag extends TagSupport {
     private static final long serialVersionUID = -2239547419306968657L;
     
     private String             fileKey     = null;
+    private String 			   varCollection = null;
     private String             var         = null;
     
     public int doEndTag() throws JspException {
@@ -36,8 +40,19 @@ public class CSVTag extends TagSupport {
             String fname = (String)pageContext.findAttribute(fileKey);
             CSVParser parser = new CSVParser(fname);
             
+            if (varCollection != null) {
+            	// read the entire thing into memory
+            	Collection<Record> records = new ArrayList<Record>(0);
+            	Record record;
+            	while( (record = parser.next()) != null ) {
+            		records.add(record);
+            	}
+            	pageContext.setAttribute(varCollection, records);
+            	
+            } else {
+            	pageContext.setAttribute(var, parser.next());
+            }
             
-            pageContext.setAttribute(var, parser.next());
             return EVAL_PAGE;
         }
         catch( IOException e ) {
@@ -46,12 +61,17 @@ public class CSVTag extends TagSupport {
         }
         finally {   
             fileKey = null;
+            varCollection = null;
             var = null;
         }
     }
     
     public void setFileKey(String fk) {
         fileKey = fk;
+    }
+    
+    public void setVarCollection(String v) {
+    	varCollection = v;
     }
     
     public void setVar(String v) {

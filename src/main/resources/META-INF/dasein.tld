@@ -82,8 +82,12 @@
       <required>true</required>
     </attribute>
     <attribute>
+      <name>varCollection</name>
+      <required>false</required>
+    </attribute>
+    <attribute>
       <name>var</name>
-      <required>true</required>
+      <required>false</required>
     </attribute>
   </tag>
 
