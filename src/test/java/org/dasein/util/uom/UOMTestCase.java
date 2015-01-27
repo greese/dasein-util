@@ -19,6 +19,10 @@
 package org.dasein.util.uom;
 
 import org.dasein.util.CalendarWrapper;
+import org.dasein.util.uom.length.Kilometer;
+import org.dasein.util.uom.length.Length;
+import org.dasein.util.uom.length.Meter;
+import org.dasein.util.uom.length.Mile;
 import org.dasein.util.uom.time.Hour;
 import org.dasein.util.uom.time.Millisecond;
 import org.dasein.util.uom.time.Minute;
@@ -83,7 +87,25 @@ public class UOMTestCase {
         assertEquals("Values are not equal", 10.5, minutes.doubleValue());
         assertTrue("Result not in minutes", minutes.getUnitOfMeasure().equals(TimePeriod.MINUTE));
     }
-    
+
+    @Test
+    public void testConvertMetersToKM() {
+        Length<Meter> meters = new Length<Meter>(5000, Length.METER);
+        Length<Kilometer> km = (Length<Kilometer>)meters.convertTo(Length.KILOMETER);
+
+        assertEquals("Values are not equal", 5, km.intValue());
+        assertTrue("Results are not in kilometers", km.getUnitOfMeasure().equals(Length.KILOMETER));
+    }
+
+    @Test
+    public void testConvertKMToMiles() {
+        Length<Kilometer> km = new Length<Kilometer>(10, Length.KILOMETER);
+        Length<Mile> miles = (Length<Mile>)km.convertTo(Length.MILE);
+
+        assertTrue("Values are not equal", 6.213 < miles.doubleValue() && 6.214 > miles.doubleValue());
+        assertTrue("Results are not in miles", miles.getUnitOfMeasure().equals(Length.MILE));
+    }
+
     @Test
     public void testAddSame() {
         TimePeriod<Minute> tenMinutes = new TimePeriod<Minute>(10, TimePeriod.MINUTE);
