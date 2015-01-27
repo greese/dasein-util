@@ -59,7 +59,7 @@ public class DataTypeMap extends PseudoMap<String,DataType<? extends Object>> im
     /**
      * Actual storage of the data types.
      */
-    private HashMap<String,DataType<? extends Object>> metaData = new HashMap<String,DataType<? extends Object>>();
+    private HashMap<String,DataType<? extends Object>> metaData = new HashMap<String,DataType<? extends Object>>(0);
 
     /**
      * Constructs a new data type map. Because instances of this class are immutable, there is
