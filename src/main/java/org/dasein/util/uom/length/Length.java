@@ -21,8 +21,11 @@ package org.dasein.util.uom.length;
 import org.dasein.util.uom.Measured;
 
 public class Length<T extends LengthUnit> extends Measured<LengthUnit,T> {
-    static public final Meter METER = new Meter();
-    
+    static public final Meter     METER     = new Meter();
+    static public final Kilometer KILOMETER = new Kilometer();
+
+    static public final Mile      MILE      = new Mile();
+
     @SuppressWarnings("unchecked")
     static public Length<? extends LengthUnit> valueOf(String str) {
         return Measured.valueOf(Length.class, str);
