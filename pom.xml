@@ -22,7 +22,7 @@
 
   <groupId>org.dasein</groupId>
   <artifactId>dasein-util</artifactId>
-  <version>2013.02.1-SNAPSHOT</version>
+  <version>2015.04.1-SNAPSHOT</version>
 
   <name>dasein-util</name>
   <description>
