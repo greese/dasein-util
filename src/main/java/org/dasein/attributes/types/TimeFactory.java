@@ -139,7 +139,7 @@ public class TimeFactory extends DataTypeFactory<Date> {
                 s.setDate(start);
                 e.setDate(end);
                 choices = new ArrayList<Date>();
-                while( s.getYear() != e.getYear() && s.getMonth() != e.getMonth() && s.getDayOfMonth() != e.getDayOfMonth() ) {
+                while( s.getYear() != e.getYear() || s.getMonth() != e.getMonth() || s.getDayOfMonth() != e.getDayOfMonth() ) {
                     choices.add(s.getDate());
                     s.getCalendar().add(Calendar.DAY_OF_MONTH, 1);
                 }
