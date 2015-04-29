@@ -23,10 +23,10 @@ package org.dasein.util;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
@@ -50,16 +50,13 @@ public class ConcurrentCache<K,V> implements ConcurrentMap<K,V> {
     /**
      * The hash map that backs up this cache.
      */
-    //private HashMap<K,WeakReference<V>> cache = new HashMap<K,WeakReference<V>>();
-    private HashMap<K,SoftReference<V>> cache = new HashMap<K,SoftReference<V>>();
+    private ConcurrentHashMap<K,SoftReference<V>> cache = new ConcurrentHashMap<K,SoftReference<V>>(0);
 
     /**
      * Clears out all elements of the cache and starts fresh.
      */
     public void clear() {
-        synchronized( this ) {
-            cache.clear();
-        }
+        cache.clear();
     }
 
     /**
@@ -68,31 +65,29 @@ public class ConcurrentCache<K,V> implements ConcurrentMap<K,V> {
      * @param key the key to test for existence
      * @return true if the cache has a value with the specified key
      */
-    @SuppressWarnings("unchecked")
     public boolean containsKey(Object key) {
-        synchronized( this ) {
-            //WeakReference ref;
-            SoftReference ref;
-            V item;
-            
-            if( !cache.containsKey(key) ) {
-                return false;
-            }
-            ref = cache.get(key);
-            item = (V)ref.get();
-            if( item == null ) {
-                return false;
-            }
-            if( item instanceof CachedItem ) {
-                CachedItem ci = (CachedItem)item;
-                
-                if( !ci.isValidForCache() ) {
-                    remove(key);
-                    return false;
-                }
-            }
-            return true;
+       
+        SoftReference<V> ref;
+        V item;
+        
+        if( !cache.containsKey(key) ) {
+            return false;
         }
+        ref = cache.get(key);
+        item = (V)ref.get();
+        if( item == null ) {
+            return false;
+        }
+        if( item instanceof CachedItem ) {
+            CachedItem ci = (CachedItem)item;
+            
+            if( !ci.isValidForCache() ) {
+                remove(key);
+                return false;
+            }
+        }
+        return true;
+        
     }
 
     /**
@@ -101,20 +96,19 @@ public class ConcurrentCache<K,V> implements ConcurrentMap<K,V> {
      * @return true if it is in the cache and value
      */
     public boolean containsValue(Object val) {
-        synchronized( this ) {
-            for( V item : values() ) {
-                if( item instanceof CachedItem ){
-                    CachedItem ci = (CachedItem)item;
+        for( V item : values() ) {
+            if( item instanceof CachedItem ){
+                CachedItem ci = (CachedItem)item;
 
-                    if( ci.isValidForCache() && ci.equals(val) ) {
-                        return true;
-                    }
-                }
-                else if( item.equals(val) ) {
+                if( ci.isValidForCache() && ci.equals(val) ) {
                     return true;
                 }
             }
+            else if( item.equals(val) ) {
+                return true;
+            }
         }
+        
         return false;
     }
     
@@ -123,17 +117,17 @@ public class ConcurrentCache<K,V> implements ConcurrentMap<K,V> {
      * @return cache entries
      */
     public Set<Entry<K, V>> entrySet() {
+    	
         TreeSet<Entry<K,V>> set = new TreeSet<Entry<K,V>>();
         
-        synchronized( this ) {
-            for(K key : keySet() ) {
-                if( containsKey(key) ) {
-                    get(key);
-                    set.add(getEntry(key));
-                }
+        for(K key : keySet() ) {
+            if( containsKey(key) ) {
+                get(key);
+                set.add(getEntry(key));
             }
-            return set;
         }
+        return set;
+        
     }
     
     /**
@@ -142,32 +136,28 @@ public class ConcurrentCache<K,V> implements ConcurrentMap<K,V> {
      * @param key the key whose item is being sought
      * @return the current value for that key, if any
      */
-    @SuppressWarnings("unchecked")
-    public V get(Object key) {
-        synchronized( this ) {
-            //WeakReference ref;
-            SoftReference ref;
-            V item;
-            
-            if( !containsKey(key) ) {
-                return null;
-            }
-            ref = cache.get(key);
-            item = (V)ref.get();
-            if( item == null ) {
-                return null;
-            }
-            if( item instanceof CachedItem ) {
-                CachedItem ci = (CachedItem)item;
-                
-                if( ci.isValidForCache() ) {
-                    return item;
-                }
-                remove(key);
-                return null;
-            }
-            return item;
+    public V get(Object key) {      
+        SoftReference<V> ref;
+        V item;
+        
+        if( !containsKey(key) ) {
+            return null;
         }
+        ref = cache.get(key);
+        item = (V)ref.get();
+        if( item == null ) {
+            return null;
+        }
+        if( item instanceof CachedItem ) {
+            CachedItem ci = (CachedItem)item;
+            
+            if( ci.isValidForCache() ) {
+                return item;
+            }
+            remove(key);
+            return null;
+        }
+        return item;
     }
 
     /**
@@ -181,7 +171,8 @@ public class ConcurrentCache<K,V> implements ConcurrentMap<K,V> {
         return new Entry<K, V>() {
             public boolean equals(Object ob) {
                 if( ob instanceof Entry ) {
-                    Entry entry = (Entry)ob;
+                    @SuppressWarnings("unchecked")
+					Entry<K, V> entry = (Entry<K, V>)ob;
                     
                     if( !entry.getKey().equals(getKey()) ) {
                         return false;
@@ -226,11 +217,10 @@ public class ConcurrentCache<K,V> implements ConcurrentMap<K,V> {
     public V getOrLoad(K key, CacheLoader<V> loader) {
         V item;
         
-       // synchronized( this ) {
-            if( containsKey(key) ) {
-                return get(key);
-            }
-        //}
+        if( containsKey(key) ) {
+            return get(key);
+        }
+       
         item = loader.load();
         if( item != null ) {
             putIfAbsent(key, item);
@@ -245,9 +235,7 @@ public class ConcurrentCache<K,V> implements ConcurrentMap<K,V> {
      * @return true of the cache is empty
      */
     public boolean isEmpty() {
-        //synchronized( this ) {
-            return cache.isEmpty();
-        //}
+    	return cache.isEmpty();
     }
 
     /**
@@ -257,22 +245,18 @@ public class ConcurrentCache<K,V> implements ConcurrentMap<K,V> {
      * @return the resulting value stored in the cache
      */
     public V put(K key, V val) {
-        //synchronized( this ) {
-            //WeakReference<V> ref = new WeakReference<V>(val);
-            SoftReference<V> ref = new SoftReference<V>(val);
-            
-            cache.put(key, ref);
-            return get(key);
-        //}
+    
+        SoftReference<V> ref = new SoftReference<V>(val);
+        
+        cache.put(key, ref);
+        return get(key);
     }
 
     /**
      * @return all of the keys in the cache
      */
     public Set<K> keySet() {
-        //synchronized( this ) {
-            return cache.keySet();
-        //}
+       return cache.keySet();
     }
 
     /**
@@ -280,11 +264,9 @@ public class ConcurrentCache<K,V> implements ConcurrentMap<K,V> {
      * @param map the map to store in this cache.
      */
     public void putAll(Map<? extends K, ? extends V> map) {
-        //synchronized( this ) {
-            for(K key : map.keySet() ) {
-                put(key, map.get(key));
-            }
-        //}
+    	for(K key : map.keySet() ) {
+    		put(key, map.get(key));
+        }
     }
 
     /**
@@ -296,23 +278,21 @@ public class ConcurrentCache<K,V> implements ConcurrentMap<K,V> {
      * @return the actual value stored with key, whether the old or the new
      */
     public V putIfAbsent(K key, V val) {
-        //synchronized( this ) {
-            V item;
+        V item;
+        
+        if( !containsKey(key) ) {
+            return put(key, val);
+        }
+        item = get(key);
+        if( item instanceof CachedItem ) {
+            CachedItem ci = (CachedItem)item;
             
-            if( !containsKey(key) ) {
-                return put(key, val);
+            if( !ci.isValidForCache() ) {
+                put(key, val);
+                return null;
             }
-            item = get(key);
-            if( item instanceof CachedItem ) {
-                CachedItem ci = (CachedItem)item;
-                
-                if( !ci.isValidForCache() ) {
-                    put(key, val);
-                    return null;
-                }
-            }
-            return item;
-        //}
+        }
+        return item;
     }
     
     /**
@@ -320,30 +300,27 @@ public class ConcurrentCache<K,V> implements ConcurrentMap<K,V> {
      * @param key the key to be removed from the cache
      * @return the previous value or null if nothing was in there in the first place
      */
-    @SuppressWarnings("unchecked")
     public V remove(Object key) {
-        //synchronized( this ) {
-            //WeakReference ref;
-            SoftReference ref;
-            V item;
-            
-            ref = cache.remove(key);
-            if( ref == null ) {
-                return null;
-            }
-            item = (V)ref.get();
-            if( item == null ) {
-                return null;
-            }
-            if( item instanceof CachedItem ) {
-                CachedItem ci = (CachedItem)item;
-                
-                if( ci.isValidForCache() ) {
-                    return item;
-                }
-            }
+    
+        SoftReference<V> ref;
+        V item;
+        
+        ref = cache.remove(key);
+        if( ref == null ) {
             return null;
-        //}
+        }
+        item = (V)ref.get();
+        if( item == null ) {
+            return null;
+        }
+        if( item instanceof CachedItem ) {
+            CachedItem ci = (CachedItem)item;
+            
+            if( ci.isValidForCache() ) {
+                return item;
+            }
+        }
+        return null;
     }
 
     /**
@@ -355,25 +332,23 @@ public class ConcurrentCache<K,V> implements ConcurrentMap<K,V> {
     public boolean remove(Object key, Object val) {
         String k = key.toString();
         
-       // synchronized( this ) {
-            V item;
-            
-            if( !containsKey(k) ) {
-                return false;
-            }
-            item = get(k);
-            if( val == null && item == null ) {
-                remove(k);
-                return true;
-            }
-            if( val == null || item == null ) {
-                return false;
-            }
-            if( val.equals(item) ) {
-                remove(k);
-                return true;
-            }
-       // }
+        V item;
+        
+        if( !containsKey(k) ) {
+            return false;
+        }
+        item = get(k);
+        if( val == null && item == null ) {
+            remove(k);
+            return true;
+        }
+        if( val == null || item == null ) {
+            return false;
+        }
+        if( val.equals(item) ) {
+            remove(k);
+            return true;
+        }
         return false;
     }
 
@@ -384,12 +359,12 @@ public class ConcurrentCache<K,V> implements ConcurrentMap<K,V> {
      * @return whatever is stored in the cache for the key when the operation completes
      */
     public V replace(K key, V val) {
-       // synchronized( this ) {
-            if( !containsKey(key) ) {
-                return null;
-            }
-            return put(key, val);
-        //}
+      
+        if( !containsKey(key) ) {
+            return null;
+        }
+        return put(key, val);
+      
     }
 
     /**
@@ -401,38 +376,39 @@ public class ConcurrentCache<K,V> implements ConcurrentMap<K,V> {
      * @return true if the value was replaced
      */
     public boolean replace(K key, V ov, V nv) {
-      //  synchronized( this ) {
-            if( !remove(key, ov) ) {
-                return false;
-            }
-            put(key, nv);
-            return true;
-        //}
+     
+        if( !remove(key, ov) ) {
+            return false;
+        }
+        put(key, nv);
+        return true;
+     
     }
 
     /**
      * @return the number of elements currently in the cache
      */
     public int size() {
-      //  synchronized( this ) {
-            return cache.size();
-       // }
+    
+        return cache.size();
+    
     }
 
     /**
      * @return all of the values in the cache
      */
     public Collection<V> values() {
-        ArrayList<V> values = new ArrayList<V>();
-        
-       // synchronized( this ) {
-            for( K key: keySet() ) {
-                if( containsKey(key) ) {
-                    values.add(get(key));
-                }
+        ArrayList<V> values = new ArrayList<V>(0);
+        for( K key: keySet() ) {
+            if( containsKey(key) ) {
+            	V val = get(key);
+            	if (val == null) {
+            		continue;
+            	}
+                values.add(val);
             }
-            return values;
-       // }
+        }
+        return values;
     }
     
     public String toString() {

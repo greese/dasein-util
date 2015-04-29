@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
@@ -97,8 +96,7 @@ public class ConcurrentMultiCache<T> {
         target = cls;
         for( String attr : attrs ) {
             if( !caches.containsKey(attr) ) {
-                //ConcurrentCache<Object,T> cache = new ConcurrentCache<Object,T>();
-            	ConcurrentHashMap<Object,T> cache = new ConcurrentHashMap<Object,T>(0);
+                ConcurrentCache<Object,T> cache = new ConcurrentCache<Object,T>();
 
                 caches.put(attr, cache);
                 order.add(attr);
@@ -115,7 +113,7 @@ public class ConcurrentMultiCache<T> {
         super();
         for( String attr : attrs ) {
             if( !caches.containsKey(attr) ) {
-            	ConcurrentHashMap<Object,T> cache = new ConcurrentHashMap<Object,T>(0);
+            	ConcurrentCache<Object,T> cache = new ConcurrentCache<Object,T>();
 
                 caches.put(attr, cache);
                 order.add(attr);
@@ -134,7 +132,7 @@ public class ConcurrentMultiCache<T> {
         target = cls;
         for( String attr : attrs ) {
             if( !caches.containsKey(attr) ) {
-            	ConcurrentHashMap<Object,T> cache = new ConcurrentHashMap<Object,T>(0);
+            	ConcurrentCache<Object,T> cache = new ConcurrentCache<Object,T>();
 
                 caches.put(attr, cache);
                 order.add(attr);
