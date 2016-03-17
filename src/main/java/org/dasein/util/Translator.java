@@ -144,7 +144,7 @@ public class Translator<T> extends PseudoMap<Locale,Translation<T>> implements D
     
     private Translator() {
         super();
-        translations = new HashMap<String,Map<String,Translation<T>>>();
+        translations = new HashMap<String,Map<String,Translation<T>>>(1);
     }
     
     public Translator(String rscName, String attr) {
@@ -218,7 +218,7 @@ public class Translator<T> extends PseudoMap<Locale,Translation<T>> implements D
     }
     
     public Set<Entry<Locale,Translation<T>>> entrySet() {
-        Map<Locale,Translation<T>> tmp = new HashMap<Locale,Translation<T>>();
+        Map<Locale,Translation<T>> tmp = new HashMap<Locale,Translation<T>>(1);
 
         if( isBundleBased() ) {
             for( Translation<T> t : values() ) {
@@ -412,6 +412,18 @@ public class Translator<T> extends PseudoMap<Locale,Translation<T>> implements D
         return trans;
     }
     
+    public Translation<T> getATranslation(Locale loc) {
+        Translation<T> trans = getExactTranslation(loc);
+
+        if( trans == null ) {
+            trans = getBestTranslation(loc);
+            if( trans == null ) {
+                trans = getAnyTranslation();                
+            }
+        }
+        return trans;
+    }
+    
     public Translation<T> getTranslation(Collection<Locale> locales) {
         Translation<T> trans;
 
@@ -508,7 +520,7 @@ public class Translator<T> extends PseudoMap<Locale,Translation<T>> implements D
             return locales;
         }
         else {
-            HashSet<Locale> locales = new HashSet<Locale>();
+            HashSet<Locale> locales = new HashSet<Locale>(1);
             
             for( String lang : translations.keySet() ) {
                 Map<String, Translation<T>> map = translations.get(lang);
@@ -677,7 +689,7 @@ public class Translator<T> extends PseudoMap<Locale,Translation<T>> implements D
 
     public Map<Locale,? extends Object> toMap() {
         if( isBundleBased() ) {
-            HashMap<Locale,Object> map = new HashMap<Locale,Object>();
+            HashMap<Locale,Object> map = new HashMap<Locale,Object>(1);
             Iterator<String> langs = languages();
             
             while( langs.hasNext() ) {
@@ -701,7 +713,7 @@ public class Translator<T> extends PseudoMap<Locale,Translation<T>> implements D
             return map;
         }
         else {
-            HashMap<Locale,Object> tmp = new HashMap<Locale,Object>();
+            HashMap<Locale,Object> tmp = new HashMap<Locale,Object>(1);
             
             for( String lang : translations.keySet() ) {
                 Map<String,Translation<T>> map = translations.get(lang);
@@ -786,7 +798,7 @@ public class Translator<T> extends PseudoMap<Locale,Translation<T>> implements D
     }
 
     public Collection<Translation<T>> values() {
-        ArrayList<Translation<T>> values = new ArrayList<Translation<T>>();
+        ArrayList<Translation<T>> values = new ArrayList<Translation<T>>(1);
         
         if( isBundleBased() ) {
             Iterator<String> langs = languages();
