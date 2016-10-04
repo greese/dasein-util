@@ -256,6 +256,7 @@ public class ConcurrentMultiCache<T> {
      * @return the object that matches the specified key/value
      */
     public T find(String key, Object val, CacheLoader<T> loader, Object ... args) {
+    	//System.out.println("cm args:" + args[0] + " " + args[1]);
     	ConcurrentMap<Object,T> cache = caches.get(key);
         T item;
 
@@ -294,14 +295,7 @@ public class ConcurrentMultiCache<T> {
             }
             tmp = cache.get(val);
             if( tmp != null ) {
-                if( tmp instanceof CachedItem ) {
-                    if( ((CachedItem)tmp).isValidForCache() ) {
-                        return tmp;
-                    }
-                }
-                else {
-                    return tmp;
-                }
+               return tmp;               
             }
         }
         return item;
@@ -313,7 +307,7 @@ public class ConcurrentMultiCache<T> {
      * @return a mapping of key names to item values
      */
     public HashMap<String,Object> getKeys(T item) {
-        HashMap<String,Object> keys = new HashMap<String,Object>(0);
+        HashMap<String,Object> keys = new HashMap<String,Object>(caches.size());
 
         for( String key: caches.keySet() ) {
             keys.put(key, getValue(key, item));
