@@ -74,6 +74,9 @@ public class ConcurrentCache<K,V> implements ConcurrentMap<K,V> {
             return false;
         }
         ref = cache.get(key);
+        if (ref == null){
+        	return false;
+        }
         item = (V)ref.get();
         if( item == null ) {
             return false;
@@ -144,6 +147,9 @@ public class ConcurrentCache<K,V> implements ConcurrentMap<K,V> {
             return null;
         }
         ref = cache.get(key);
+        if (ref == null) {
+        	return null;
+        }
         item = (V)ref.get();
         if( item == null ) {
             return null;
