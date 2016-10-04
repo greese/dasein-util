@@ -680,7 +680,7 @@ public class Translator<T> extends PseudoMap<Locale,Translation<T>> implements D
                 map = translations.get(lang);
             }
             else {
-                map = new HashMap<String,Translation<T>>();
+                map = new HashMap<String,Translation<T>>(0);
                 translations.put(lang, map);
             }
             map.put(ctry, item);
