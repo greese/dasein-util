@@ -68,10 +68,10 @@ public class StringFactory extends DataTypeFactory<String> {
     }
     
     public Collection<Constraint> getConstraints() {
-        ArrayList<Constraint> tmp = new ArrayList<Constraint>();
+        ArrayList<Constraint> tmp = new ArrayList<Constraint>(2);
         
         if( constraints == null ) {
-            ArrayList<Constraint> lt = new ArrayList<Constraint>();
+            ArrayList<Constraint> lt = new ArrayList<Constraint>(2);
             
             lt.add(new Constraint("longtext", DataTypeFactory.getInstance(BooleanFactory.TYPE_NAME).getType(false, false, true), false));
             lt.add(new Constraint("options", DataTypeFactory.getInstance(StringFactory.TYPE_NAME).getType(false,false,false), true));
