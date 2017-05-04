@@ -234,7 +234,7 @@ public class DataTypeMap extends PseudoMap<String,DataType<? extends Object>> im
      * @return all of the data types in this data type map
      */
     public Collection<DataType<? extends Object>> values() {
-        ArrayList<DataType<? extends Object>> tmp = new ArrayList<DataType<? extends Object>>();
+        ArrayList<DataType<? extends Object>> tmp = new ArrayList<DataType<? extends Object>>(metaData.size());
 
         tmp.addAll(metaData.values());
         return tmp;

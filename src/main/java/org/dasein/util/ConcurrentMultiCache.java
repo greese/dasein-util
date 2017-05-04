@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * <p>
@@ -73,11 +74,12 @@ public class ConcurrentMultiCache<T> {
     /**
      * A mapping of the unique identifer names to concurrent caches.
      */
-    private HashMap<String,ConcurrentCache<Object,T>> caches = new HashMap<String,ConcurrentCache<Object,T>>();
+    private HashMap<String,ConcurrentMap<Object,T>> caches = new HashMap<String,ConcurrentMap<Object,T>>(0);
+    
     /**
      * The ordered list of unique identifiers supported by this cache.
      */
-    private ArrayList<String>                         order  = new ArrayList<String>();
+    private ArrayList<String>                         order  = new ArrayList<String>(0);
     /**
      * The class being managed by this cache, if any.
      */
@@ -111,7 +113,7 @@ public class ConcurrentMultiCache<T> {
         super();
         for( String attr : attrs ) {
             if( !caches.containsKey(attr) ) {
-                ConcurrentCache<Object,T> cache = new ConcurrentCache<Object,T>();
+            	ConcurrentCache<Object,T> cache = new ConcurrentCache<Object,T>();
 
                 caches.put(attr, cache);
                 order.add(attr);
@@ -130,7 +132,7 @@ public class ConcurrentMultiCache<T> {
         target = cls;
         for( String attr : attrs ) {
             if( !caches.containsKey(attr) ) {
-                ConcurrentCache<Object,T> cache = new ConcurrentCache<Object,T>();
+            	ConcurrentCache<Object,T> cache = new ConcurrentCache<Object,T>();
 
                 caches.put(attr, cache);
                 order.add(attr);
@@ -156,7 +158,7 @@ public class ConcurrentMultiCache<T> {
         synchronized( this ) {
             item = getCurrent(item);
             for( String key : caches.keySet() ) {
-                ConcurrentCache<Object,T> cache = caches.get(key);
+            	ConcurrentMap<Object,T> cache = caches.get(key);
 
                 cache.put(keys.get(key), item);
             }
@@ -254,7 +256,8 @@ public class ConcurrentMultiCache<T> {
      * @return the object that matches the specified key/value
      */
     public T find(String key, Object val, CacheLoader<T> loader, Object ... args) {
-        ConcurrentCache<Object,T> cache = caches.get(key);
+    	//System.out.println("cm args:" + args[0] + " " + args[1]);
+    	ConcurrentMap<Object,T> cache = caches.get(key);
         T item;
 
         if( val instanceof BigDecimal ) {
@@ -283,7 +286,7 @@ public class ConcurrentMultiCache<T> {
      */
     private T getCurrent(T item) {
         for( String key: order ) {
-            ConcurrentCache<Object,T> cache = caches.get(key);
+        	ConcurrentMap<Object,T> cache = caches.get(key);
             Object val = getValue(key, item);
             T tmp;
 
@@ -292,14 +295,7 @@ public class ConcurrentMultiCache<T> {
             }
             tmp = cache.get(val);
             if( tmp != null ) {
-                if( tmp instanceof CachedItem ) {
-                    if( ((CachedItem)tmp).isValidForCache() ) {
-                        return tmp;
-                    }
-                }
-                else {
-                    return tmp;
-                }
+               return tmp;               
             }
         }
         return item;
@@ -311,7 +307,7 @@ public class ConcurrentMultiCache<T> {
      * @return a mapping of key names to item values
      */
     public HashMap<String,Object> getKeys(T item) {
-        HashMap<String,Object> keys = new HashMap<String,Object>();
+        HashMap<String,Object> keys = new HashMap<String,Object>(caches.size());
 
         for( String key: caches.keySet() ) {
             keys.put(key, getValue(key, item));
@@ -329,7 +325,8 @@ public class ConcurrentMultiCache<T> {
      * @param item the object who's unique identifier value is sought
      * @return the unique identifier for the object's attribute matching the key
      */
-    private Object getValue(String key, T item) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	private Object getValue(String key, T item) {
         Class cls = item.getClass();
 
         while( true ) {
@@ -390,7 +387,7 @@ public class ConcurrentMultiCache<T> {
         keys = getKeys(item);
         synchronized( this ) {
             for( String key : caches.keySet() ) {
-                ConcurrentCache<Object,T> cache = caches.get(key);
+            	ConcurrentMap<Object,T> cache = caches.get(key);
                 Object ob = keys.get(key);
 
                 if( ob instanceof BigDecimal ) {
@@ -412,7 +409,7 @@ public class ConcurrentMultiCache<T> {
 
         synchronized( this ) {
             for( String key : order ) {
-                ConcurrentCache<Object,T> cache = caches.get(key);
+            	ConcurrentMap<Object,T> cache = caches.get(key);
 
                 cache.remove(keys.get(key));
             }
@@ -428,7 +425,7 @@ public class ConcurrentMultiCache<T> {
      */
     public void releaseAll() {
     	synchronized( this ) {
-    		for (ConcurrentCache<Object,T> cache : caches.values()) {
+    		for (ConcurrentMap<Object,T> cache : caches.values()) {
     			cache.clear();
     		}
     	}

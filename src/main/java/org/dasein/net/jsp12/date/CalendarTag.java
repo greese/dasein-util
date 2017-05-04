@@ -155,11 +155,11 @@ public class CalendarTag extends TagSupport {
     	Number num;
         
         if (t instanceof String) {
-        	num = Integer.parseInt((String) t);
+        	num = Long.parseLong((String) t);
         } else {
         	num = (Number) t;
         }
-        time = num.intValue();
+        time = num;
     }
 
     public void setVar(String v) {

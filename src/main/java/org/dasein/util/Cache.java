@@ -53,7 +53,7 @@ public class Cache<T> implements Collection<T>, Serializable {
 	/**
      * A hash map indexing references by unique keys.
      */
-    private HashMap<Object,SoftReference<T>> cache = new HashMap<Object,SoftReference<T>>();
+    private HashMap<Object,SoftReference<T>> cache = new HashMap<Object,SoftReference<T>>(0);
 
     /*
      * Constructs a new empty cache.

@@ -18,7 +18,6 @@
 
 package org.dasein.util;
 
-import com.sun.istack.internal.Nullable;
 import org.apache.log4j.Logger;
 import org.dasein.util.uom.time.Millisecond;
 import org.dasein.util.uom.time.TimePeriod;
@@ -73,7 +72,7 @@ public class Jiterator<T> implements Iterator<T>, Iterable<T> {
     }
 
     @SuppressWarnings("unused")
-    public Jiterator(@Nullable JiteratorFilter<T> filter) {
+    public Jiterator( JiteratorFilter<T> filter) {
         this(null, null, filter, null);
     }
     
@@ -85,7 +84,7 @@ public class Jiterator<T> implements Iterator<T>, Iterable<T> {
      * @param list the source list of items to initialize the jiterator with
      */
     @SuppressWarnings("unused")
-    public Jiterator(@Nullable Collection<T> list) {
+    public Jiterator( Collection<T> list) {
         this(null, list, null, null);
     }
 
@@ -94,7 +93,7 @@ public class Jiterator<T> implements Iterator<T>, Iterable<T> {
      * @param name the name of the jiterator
      */
     @SuppressWarnings("unused")
-    public Jiterator(@Nullable String name) {
+    public Jiterator( String name) {
         this(name, null, null, null);
     }
 
@@ -104,7 +103,7 @@ public class Jiterator<T> implements Iterator<T>, Iterable<T> {
      * @param timeout the timeout period after going without a touch
      */
     @SuppressWarnings("unused")
-    public Jiterator(@Nullable String name, @Nullable org.dasein.util.uom.time.TimePeriod<?> timeout) {
+    public Jiterator( String name,  org.dasein.util.uom.time.TimePeriod<?> timeout) {
         this(name, null, null, timeout);
     }
 
@@ -130,7 +129,7 @@ public class Jiterator<T> implements Iterator<T>, Iterable<T> {
      * @param filter a filter to filter out items being added to the list
      * @param timeout a timeout period that will cause the jiterator to timeout with an error 
      */
-    public Jiterator(@Nullable String name, @Nullable Collection<T> starterList, @Nullable JiteratorFilter<T> filter, @Nullable TimePeriod<?> timeout) {
+    public Jiterator( String name,  Collection<T> starterList,  JiteratorFilter<T> filter,  TimePeriod<?> timeout) {
         lastTouch = System.currentTimeMillis();
         loaded = false;
         waiting = new ArrayList<T>();
@@ -258,7 +257,7 @@ public class Jiterator<T> implements Iterator<T>, Iterable<T> {
      * @return true if there are more elements to be processed
      * @throws NoSuchElementException an attempt was made to read beyond the last item in the jiterator
      */    
-    public synchronized @Nullable T next() throws JiteratorLoadException {
+    public synchronized  T next() throws JiteratorLoadException {
         while( nexting ) {
             if( logger.isInfoEnabled() ) {
                 logger.info("[" + this + "] Waiting for another thread to pull item...");
@@ -309,7 +308,7 @@ public class Jiterator<T> implements Iterator<T>, Iterable<T> {
      * @param item the item to be added
      * @throws IllegalStateException an attempt was made to push an item on a jiterator marked complete
      */
-    public synchronized void push(@Nullable T item) {
+    public synchronized void push( T item) {
         if( waiting == null ) {
             throw new IllegalStateException("Invalid attempt to add an item to a completed list.");
         }

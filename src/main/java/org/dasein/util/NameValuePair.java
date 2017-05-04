@@ -47,7 +47,9 @@ public class NameValuePair implements Comparable<NameValuePair>, Serializable {
             String[] parts = str.split("=");
             
             name = parts[0];
-            value = parts[1];
+            if (parts.length > 1) {
+            	value = parts[1];
+            }
         }
         name = name.replaceAll("%3D", "=");
         if( value != null ) {

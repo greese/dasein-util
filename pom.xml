@@ -22,7 +22,7 @@
 
   <groupId>org.dasein</groupId>
   <artifactId>dasein-util</artifactId>
-  <version>2013.02.1-SNAPSHOT</version>
+  <version>2015.04.1-SNAPSHOT</version>
 
   <name>dasein-util</name>
   <description>
@@ -100,8 +100,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.0.2</version>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>1.5</source>
+          <target>1.5</target>
         </configuration>
       </plugin> 
       <plugin>

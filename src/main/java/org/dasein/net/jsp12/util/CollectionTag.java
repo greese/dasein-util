@@ -28,7 +28,7 @@ public class CollectionTag extends TagSupport {
     private static final long serialVersionUID = 7368053391925940191L;
     
     private Collection<Object> items       = null;
-    private Collection<Object> raw         = new ArrayList<Object>();
+    private Collection<Object> raw         = new ArrayList<Object>(0);
     private boolean            unique      = false;
     private String             var         = null;
     
@@ -55,7 +55,7 @@ public class CollectionTag extends TagSupport {
         }
         finally {   
             items = null;
-            raw = new ArrayList<Object>();
+            raw = new ArrayList<Object>(0);
             unique = false;
             var = null;
         }
