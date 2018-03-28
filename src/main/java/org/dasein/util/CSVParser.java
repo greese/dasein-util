@@ -227,13 +227,16 @@ public class CSVParser {
     static public void main(String ... args) {
         try {
             CSVParser parser = new CSVParser(args[0]);
+            System.out.println(parser.getDelimiter());
+            System.out.println(parser.getEncloser());
             Record header = parser.next();
             Record current;
-            
+            System.out.println(header.getColumns());
             if( header == null ) {
                 System.out.println("Empty file.");
             }
             while( (current = parser.next()) != null ) {
+            	
                 for(int i=0; i<header.columns.size(); i++) {
                 	if (current.columns.size() <= i) {
                 		continue;

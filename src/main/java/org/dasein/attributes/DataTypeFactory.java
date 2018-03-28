@@ -165,7 +165,7 @@ public abstract class DataTypeFactory<V> implements Serializable {
                     String line;
                     
                     while( (line = reader.readLine()) != null ) {
-                        System.out.println(line);
+                        //System.out.println(line);
                         line = line.trim();
                         if( line.length() < 1 ) {
                             continue;
